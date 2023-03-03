@@ -17,9 +17,12 @@ git config --global user.name "your-github-username"
   + Tools --> Global Options --> Git/SVN --> Generate RSA Key --> Use Passphrase if you want
 * Add your Global Key to Github: 
   + Personal Settings --> SSH and GPG keys
-### 3. Clone Repository (Create your own Branch)
-* RStudio -> File -> New Project -> Version Control -> Git -> Repository URL (Your Branch)
-
+### 3. Clone Repository
+* RStudio -> File -> New Project -> Version Control -> Git -> Repository URL 
++ Switch to your repository
+```
+git checkout <Your Branch Name>
+```
 
 
 
