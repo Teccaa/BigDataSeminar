@@ -8,11 +8,12 @@ Big Data Methods for Economists
 Type the following code on the command line
 ```
 git init
-```
-```
 git config --global user.email "your@email.com"
 git config --global user.name "your-github-username"
 ```
+- I would suggest to connect to Github with an RSA Key
+- RStudio --> Tools --> Global Options --> Git/SVN --> Generate RSA Key --> Use Passphrase if you want
+- Add your Global Key to Github: Personal Settings --> SSH and GPG keys
 
 
 
