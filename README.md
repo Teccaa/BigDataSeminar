@@ -5,7 +5,7 @@ Big Data Methods for Economists
 
 ### 1. Download & Install Git
 * https://git-scm.com/
-### 2. R-Studio
+### 2. RStudio
 Type the following code on the command line
 ```
 git init
@@ -23,6 +23,8 @@ git config --global user.name "your-github-username"
 ```
 git checkout <Your Branch Name>
 ```
+### 7. Commit and Push your changes with RStudio
+![image](https://user-images.githubusercontent.com/91737428/222805752-e1a5ebb4-e8bc-41d0-8667-8eb47c5eb7f2.png)
 
 
 
