@@ -27,7 +27,5 @@ git checkout <Your Branch Name>
 ![image](https://user-images.githubusercontent.com/91737428/222805752-e1a5ebb4-e8bc-41d0-8667-8eb47c5eb7f2.png)
 
 
-
-
 ## Overleaf
 https://www.overleaf.com/5299229479fwpwntmbzmxh
