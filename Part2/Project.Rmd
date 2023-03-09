@@ -1,0 +1,26 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
+
+# Group Project
+
+Set working directory
+```{r}
+rm(list=ls())
+setwd("/Users/beat/Documents/00_UZH/23FS/Big\ Data/BigDataSeminar/Part1/")
+```
+
+Install the packages
+```{r}
+# install.packages("data.table")
+# install.packages("nnet")
+```
+
+Load the packages
+```{r}
+library(data.table)
+library(nnet)
+```
+
