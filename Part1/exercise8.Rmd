@@ -49,8 +49,8 @@ ggplot() +
 ## Exercise 8b
 Use a feed-forward neural network and the logistic activation which are the defaults for the package nnet. We take one number as input of our neural network and we want one number as the output so the size of the input and output layer are both of one. For the hidden layer, we’ll start with three neurons. It’s good practice to randomize the initial weights, so create a vector of 10 random values, picked in the interval [-1,1].
 ```{r}
-# use nnet to create neural network
-model1 <- nnet(Y ~ X, data = data, size = 3, Wts = runif(10, -1, 1), maxit=100)
+# init weights
+wghts = runif(10, -1, 1)
 
 ```
 
@@ -72,51 +72,62 @@ test <- data[-train_indices,]
 Load the nnet package and use the function of the same name to create your model. Pass your weights via the Wts argument and set the maxit argument to 50. We want to fit a function which can have for output multiple possible values. To do so, set the linout argument to true. Finally, take the time to look at the structure of your model.
 ```{r}
 # use nnet to create neural network
-model2 <- nnet(Y ~ X, data = train, size = 3, Wts = runif(10, -1, 1), linout = TRUE, maxit=50)
-
-# doesn't converge!!
+model1 <- nnet(Y ~ X, data = train, size = 3, Wts = wghts, linout = TRUE, maxit=50)
 ```
 ```{r}
 # model summary
-print(model2)
+print(model1)
 ```
-
-```{r}
-# model structure
-str(model2)
-```
-
 ## Exercise 8e
 Predict the output for the test set and compute the RMSE of your predictions. Plot the function sin(x) and then plot your predictions.
 ```{r}
 # Predict
-test$pred <- predict(model2, newdata = test)
+test$pred1 <- predict(model1, newdata = test)
 
 # RMSE
-rmse <- sqrt(mean((test$pred - test$Y)^2))
+rmse <- sqrt(mean((test$pred1 - test$Y)^2))
 cat("RMSE:", rmse, "\n")
 ```
 
 ## Exercise 8f
 The number of neurons in the hidden layer, as well as the number of hidden layer used, has a great influence on the effectiveness of your model. Repeat the exercises (c) to (e), but this time use a hidden layer with seven neurons and initiate randomly 22 weights.
 ```{r}
+# New init weights
+wghts = runif(22, -1, 1)
+
 # use nnet to create neural network
-model3 <- nnet(Y ~ X, data = train, size = 7, Wts = runif(22, -1, 1), linout = TRUE, maxit=50)
+model2 <- nnet(Y ~ X, data = train, size = 7, Wts = wghts, linout = TRUE, maxit=50)
 
 # Predict
-test$pred2 <- predict(model3, newdata = test)
+test$pred2 <- predict(model2, newdata = test)
 
 # RMSE
 rmse <- sqrt(mean((test$pred2 - test$Y)^2))
 cat("RMSE:", rmse, "\n")
 
 ```
+
+running our own model with more iterations
+```{r}
+# use nnet to create neural network
+model3 <- nnet(Y ~ X, data = train, size = 7, Wts = wghts, linout = TRUE, maxit=100)
+
+# Predict
+test$pred3 <- predict(model3, newdata = test)
+
+# RMSE
+rmse <- sqrt(mean((test$pred3 - test$Y)^2))
+cat("RMSE:", rmse, "\n")
+```
+
+
 ```{r}
 # Plot
 ggplot() + 
   geom_line(data = train, aes(x = X, y = Y), color = "black") +
-  geom_point(data = test, aes(x = X, y = pred), color = "blue") +
+  geom_point(data = test, aes(x = X, y = pred1), color = "blue") +
   geom_point(data = test, aes(x = X, y = pred2), color = "red") +
+  geom_point(data = test, aes(x = X, y = pred3), color = "darkgreen") +
   ggtitle("Prediction with 3 (blue) and 7 (red) hidden neurons") +
   xlab("X") + ylab("Y")
 ```
