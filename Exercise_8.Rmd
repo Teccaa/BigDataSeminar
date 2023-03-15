@@ -1,3 +1,9 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+  word_document: default
+---
 
 # Exercise 8
 
@@ -8,7 +14,7 @@ rm(list=ls())
 setwd("C:\\Users\\Remo_\\OneDrive\\Dokumente\\BigDataSeminar")
 ```
 
-````{r}
+```{r}
 #install the packages
 #install.packages("data.table")
 #install.packages("nnet")
@@ -155,6 +161,9 @@ ggplot() +
   geom_point(data = test, aes(x = X, y = pred1), color = "blue") +
   geom_point(data = test, aes(x = X, y = pred2), color = "red") +
   geom_point(data = test, aes(x = X, y = pred3), color = "darkgreen") +
-  ggtitle("Prediction with 3 (blue) and 7 (red) hidden neurons") +
+  ggtitle("Prediction with 3 (blue) and 7 (red) hidden neurons. 100 iterations (dark green)") +
   xlab("X") + ylab("Y")
 ```
+
+The neural network failed to converge after 50 iterations. This was the case for the model with three neurons in the hidden layer and with seven, respectively.
+Therefore, we retrained the model with 100 iterations and reached convergence (seen in dark green in the plot above).
