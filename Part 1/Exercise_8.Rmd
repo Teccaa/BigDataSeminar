@@ -1,0 +1,169 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+  word_document: default
+---
+
+# Exercise 8
+
+
+```{r}
+#Set working directory
+rm(list=ls())
+setwd("C:\\Users\\Remo_\\OneDrive\\Dokumente\\BigDataSeminar")
+```
+
+```{r}
+#install the packages
+#install.packages("data.table")
+#install.packages("nnet")
+#install.packages("ISLR")
+#install.packages("ggplot2")
+#install.packages("reshape")
+```
+
+
+```{r}
+#Load the packages
+library(data.table)
+library(nnet)
+library(ISLR)
+library(ggplot2)
+library(devtools)
+library(reshape)
+#import the plotting function from Github
+source_url('https://gist.githubusercontent.com/fawda123/7471137/raw/466c1474d0a505ff044412703516c34f1a4684a5/nnet_plot_update.r')
+```
+
+## (a)
+Create the data set on which we want to do a simple regression. Set the seed to 42,
+generate 200 random points between -10 and 10 and store them in a vector named X.
+Then, create a vector named Y containing the value of sin(x).
+
+```{r}
+#Dataset creation
+
+set.seed(42)
+X <- runif(200, -10, 10)
+Y <- sin(X)
+
+data <- data.frame(X, Y)
+
+#Plot the created dataset
+
+ggplot()+
+  geom_point(data=data, aes(x=X, y=Y))
+```
+
+## (b)
+Use a feed-forward neural network and the logistic activation which are the defaults for
+the package nnet. We take one number as input of our neural network and we want one
+number as the output so the size of the input and output layer are both of one. For the
+hidden layer, we’ll start with three neurons. It’s good practice to randomize the initial
+weights, so create a vector of 10 random values, picked in the interval [-1,1].
+
+```{r}
+#Initialize weights
+weights10 <- runif(10, min=-1, max=1)
+```
+
+## (c)
+Split data to a training set containing 75% of the values in your initial data set and a test set containing the rest of your data.
+
+```{r}
+# define the Split
+split = 0.75
+n_train <- nrow(data) * split
+
+# sample row indices
+
+train_indices <- sample(seq_len(nrow(data)), size = n_train, replace = FALSE)
+
+# Split the data
+train <- data[train_indices,]
+test <- data[-train_indices,]
+
+```
+
+
+## (d)
+Load the nnet package and use the function of the same name to create your model. Pass
+your weights via the Wts argument and set the maxit argument to 50. We want to fit
+a function which can have for output multiple possible values. To do so, set the linout
+argument to true. Finally, take the time to look at the structure of your model.
+```{r}
+# Create Model
+model1 <- nnet(Y ~ X, data = train, size = 3, Wts = weights10, linout = TRUE, maxit=50)
+ 
+#plot the model
+plot.nnet(model1)
+```
+
+
+## (e)
+Predict the output for the test set and compute the RMSE of your predictions. Plot the
+function sin(x) and then plot your predictions.
+```{r}
+test$pred1 <- predict(model1, newdata = test)
+
+# RMSE
+
+rmse <- sqrt(mean((test$pred1 - test$Y)^2))
+cat("RMSE:", rmse, "\n")
+
+```
+
+## (f)
+The number of neurons in the hidden layer, as well as the number of hidden layer used,
+has a great influence on the effectiveness of your model. Repeat the exercises (c) to (e),
+but this time use a hidden layer with seven neurons and initiate randomly 22 weights.
+```{r}
+#Initialize weights
+weights22 = runif(22, -1, 1)
+
+# use nnet to create neural network
+model2 <- nnet(Y ~ X, data = train, size = 7, Wts = weights22, linout = TRUE, maxit=50)
+
+# Predict
+test$pred2 <- predict(model2, newdata = test)
+
+# RMSE
+rmse <- sqrt(mean((test$pred2 - test$Y)^2))
+cat("RMSE:", rmse, "\n")
+
+#plot the model
+plot.nnet(model2)
+
+```
+
+## Further
+
+Running our own model with more iterations
+
+```{r}
+# use nnet to create neural network
+model3 <- nnet(Y ~ X, data = train, size = 7, Wts = weights22, linout = TRUE, maxit=100)
+
+# Predict
+test$pred3 <- predict(model3, newdata = test)
+
+# RMSE
+rmse <- sqrt(mean((test$pred3 - test$Y)^2))
+cat("RMSE:", rmse, "\n")
+```
+
+
+```{r}
+# Plot
+ggplot() + 
+  geom_line(data = train, aes(x = X, y = Y), color = "black") +
+  geom_point(data = test, aes(x = X, y = pred1), color = "blue") +
+  geom_point(data = test, aes(x = X, y = pred2), color = "red") +
+  geom_point(data = test, aes(x = X, y = pred3), color = "darkgreen") +
+  ggtitle("Prediction with 3 (blue) and 7 (red) hidden neurons. 100 iterations (dark green)") +
+  xlab("X") + ylab("Y")
+```
+
+The neural network failed to converge after 50 iterations. This was the case for the model with three neurons in the hidden layer and with seven, respectively.
+Therefore, we retrained the model with 100 iterations and reached convergence (seen in dark green in the plot above).
